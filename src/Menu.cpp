@@ -7,11 +7,23 @@
 
 #include "Menu.h"
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
 using namespace std;
+
+List mylist;
 
 Menu::Menu()
 {
-
+	ifstream lec("mycontacts");
+	if(lec.is_open())
+	{
+		string temp;
+		while (getline(lec, temp))
+			if(temp != "")
+				mylist.add(temp);
+		lec.close();
+	}
 }
 
 void Menu::clearScreen()
@@ -71,26 +83,74 @@ void Menu::routeAction(int option)
 
 void Menu::listContacts()
 {
-	//TODO: Implement this
-	cout << "Implement  Menu::listContacts" << endl;
+	mylist.listall();
+	cout << endl;
 }
 
 void Menu::addContacts()
 {
-	//TODO: Implement this
-	cout << "Implement  Menu::addContacts" << endl;
+	string resp = "";
+
+	while(resp == "")
+	{
+		cout << "Input the contact's name: ";
+		cin >> resp;
+	}
+
+	mylist.add(resp);
+
+	cout << "Added!" << endl;
 }
 
 void Menu::removeContacts()
 {
-	//TODO: Implement this
-	cout << "Implement  Menu::removeContacts" << endl;
+	int resp = 0;
+
+	while(resp == 0)
+	{
+		cout << "Input the position of the element to remove: ";
+		cin >> resp;
+	}
+
+	mylist.remove(resp-1);
 }
 
 void Menu::modifyContacts()
 {
-	//TODO: Implement this
-	cout << "Implement  Menu::modifyContacts" << endl;
+	if(mylist._count == 0)
+	{
+		cout << "The list is empty!" << endl;
+		return;
+	}
+
+	int inx = 0;
+
+	while(inx == 0)
+	{
+		cout << "Input the position of the element to modify: ";
+		cin >> inx;
+
+		if(inx < 0)
+		{
+			cout << "* The position must be positive! *" << endl;
+			inx = 0;
+		}
+		else if(inx > mylist._count)
+		{
+			cout << "* Position out of bounds! *" << endl;
+			inx = 0;
+		}
+	}
+
+	string name = "";
+
+	while(name == "")
+	{
+		cout << "Input the new name: ";
+		cin >> name;
+	}
+
+	mylist.modify(inx-1, name);
 }
 
 void Menu::show()

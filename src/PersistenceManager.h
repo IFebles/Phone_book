@@ -14,6 +14,8 @@ class PersistenceManager
 {
 	public:
 		PersistenceManager();
+		void save(std::string);
+		//std::string load();
 };
 
 #endif /* PERSISTENCEMANAGER_H_ */
